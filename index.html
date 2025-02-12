@@ -5,211 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cozy Moments Gallery</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* (Keep all the previous CSS styles from earlier version) */
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f1e8;
-            color: #4a4a4a;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        header {
-            text-align: center;
-            padding: 4rem 0;
-            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1495195129352-aeb325a55b65?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            margin-bottom: 2rem;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            padding: 2rem 0;
-        }
-
+        /* MODIFIED FOR VERTICAL PHOTOS */
         .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            cursor: pointer;
-            aspect-ratio: 1;
-        }
-
-        .gallery-item:hover {
-            transform: translateY(-5px);
+            aspect-ratio: 3/4; /* Better for vertical photos */
         }
 
         .gallery-item img {
-            width: 100%;
-            height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            object-position: center top; /* Focus on top of vertical images */
         }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s;
-        }
-
-        .modal-content {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .modal img {
-            width: 100%;
-            height: auto;
-        }
-
-        .close {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: white;
-            font-size: 40px;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        .close:hover {
-            opacity: 0.7;
-        }
-
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
-        }
-
-        /* Mobile Optimization */
         @media (max-width: 768px) {
             .gallery {
-                grid-template-columns: 1fr;
-                gap: 1rem;
+                grid-template-columns: 1fr; /* Single column on mobile */
             }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .close {
-                font-size: 30px;
-                top: 15px;
-                right: 20px;
-            }
-        }
-
-        /* Cozy Elements */
-        .intro-text {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 3rem;
-            font-size: 1.1rem;
-            color: #666;
-        }
-
-        .divider {
-            width: 50px;
-            height: 3px;
-            background-color: #d4a373;
-            margin: 2rem auto;
         }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>Cozy Moments Captured</h1>
-            <p>Warm memories & beautiful moments</p>
+            <h1>My Cozy Moments</h1>
+            <p>Personal collection of warm memories</p>
         </div>
     </header>
 
     <div class="container">
         <div class="intro-text">
-            <p>Welcome to our collection of carefully curated cozy moments. Each image tells a story of warmth, comfort, and simple pleasures.</p>
+            <p>A visual diary of my favorite cozy moments.</p>
             <div class="divider"></div>
         </div>
 
         <div class="gallery">
-            <!-- Replace these image URLs with your own -->
-            <div class="gallery-item" onclick="openModal('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')">
-                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Cozy Reading">
+            <!-- REPLACE THESE 5 ITEMS WITH YOUR PHOTOS -->
+            <div class="gallery-item" onclick="openModal('images/photo1.jpg')">
+                <img src="images/photo1.jpg" alt="My cozy moment 1">
             </div>
-            <div class="gallery-item" onclick="openModal('https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')">
-                <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Warm Kitchen">
+            <div class="gallery-item" onclick="openModal('images/photo2.jpg')">
+                <img src="images/photo2.jpg" alt="My cozy moment 2">
             </div>
-            <div class="gallery-item" onclick="openModal('https://images.unsplash.com/photo-1578995510050-15728a140014?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')">
-                <img src="https://images.unsplash.com/photo-1578995510050-15728a140014?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Morning Coffee">
+            <div class="gallery-item" onclick="openModal('images/photo3.jpg')">
+                <img src="images/photo3.jpg" alt="My cozy moment 3">
             </div>
-            <div class="gallery-item" onclick="openModal('https://images.unsplash.com/photo-1575428652377-a2d80b2287a6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')">
-                <img src="https://images.unsplash.com/photo-1575428652377-a2d80b2287a6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Comfy Blanket">
+            <div class="gallery-item" onclick="openModal('images/photo4.jpg')">
+                <img src="images/photo4.jpg" alt="My cozy moment 4">
             </div>
-            <div class="gallery-item" onclick="openModal('https://images.unsplash.com/photo-1556911220-e35b7eab9792?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')">
-                <img src="https://images.unsplash.com/photo-1556911220-e35b7eab9792?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Relaxing Bath">
+            <div class="gallery-item" onclick="openModal('images/photo5.jpg')">
+                <img src="images/photo5.jpg" alt="My cozy moment 5">
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
-    <div id="myModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div class="modal-content">
-            <img id="modalImg" src="" alt="">
-        </div>
-    </div>
-
-    <script>
-        function openModal(src) {
-            document.getElementById('modalImg').src = src;
-            document.getElementById('myModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Prevent scrolling
-        }
-
-        function closeModal() {
-            document.getElementById('myModal').style.display = 'none';
-            document.body.style.overflow = 'auto'; // Restore scrolling
-        }
-
-        // Close modal when clicking outside the image
-        window.onclick = function(event) {
-            const modal = document.getElementById('myModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-    </script>
+    <!-- (Keep the modal and JavaScript the same) -->
 </body>
 </html>
