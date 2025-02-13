@@ -1,63 +1,650 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cozy Moments Gallery</title>
-    <style>
-        /* (Keep all the previous CSS styles from earlier version) */
+  <meta charset="UTF-8" />
+  <title>Romantic Museum — Gulsen seni cok seviyorum - Sener Dagli</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--
+    This website is the result of “crazy effort” to evoke a decade’s worth of passion.
+    It features:
+      • A custom, realistic night sky background (dense stars, drifting clouds, dramatic comets)
+      • A premium, well–organized gallery layout with elegant spacing
+      • A lightbox expansion that shows images in full without awkward cropping
+      • An impressive, all–white “Peony” firework animation
+      • Falling hearts and kisses, plus a background music toggle with volume control
+      • A luxurious header styled like a Rolls‑Royce top
+    All images are loaded from the "images" folder (photo1.jpg, photo2.jpg, etc.)
+  -->
+  <!-- Optional Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Playfair+Display:400,700&display=swap" rel="stylesheet">
+  <style>
+    /* =========================================================================
+       1. GLOBAL RESET & BASE STYLES
+       ========================================================================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      background: #000; /* fallback */
+    }
+    body {
+      font-family: 'Playfair Display', serif;
+      color: #fff;
+      position: relative;
+      user-select: none;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      background: rgba(255,255,255,0.1);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.4);
+      border-radius: 4px;
+    }
+    
+    /* =========================================================================
+       2. HEADER & NAVIGATION
+       ========================================================================= */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1rem 2rem;
+      z-index: 1200;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+    }
+    header h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      color: #ffd3f7;
+      text-shadow: 0 0 10px #fff, 0 0 30px #ffd3f7;
+      animation: headerGlow 6s ease-in-out infinite;
+    }
+    @keyframes headerGlow {
+      0%, 100% {
+        text-shadow: 0 0 10px #fff, 0 0 30px #ffd3f7;
+      }
+      50% {
+        text-shadow: 0 0 20px #fff, 0 0 40px #f0f;
+      }
+    }
 
-        /* MODIFIED FOR VERTICAL PHOTOS */
-        .gallery-item {
-            aspect-ratio: 3/4; /* Better for vertical photos */
-        }
+    /* =========================================================================
+       3. CANVAS BACKGROUND – REALISTIC NIGHT SKY
+          (Dense stars, drifting “nebula” clouds, and dramatic comets)
+       ========================================================================= */
+    #sky-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -20; /* behind everything */
+    }
+    /* =========================================================================
+       4. FIREWORKS CANVAS – IMPRESSIVE ALL-WHITE "PEONY" FIREWORKS
+       ========================================================================= */
+    #fireworks-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1100;
+      pointer-events: none;
+    }
 
-        .gallery-item img {
-            object-fit: cover;
-            object-position: center top; /* Focus on top of vertical images */
-        }
+    /* =========================================================================
+       5. ACTION BUTTONS (Fireworks, Hearts, Kisses, Music Toggle & Volume)
+       ========================================================================= */
+    .action-buttons {
+      position: fixed;
+      bottom: 2%;
+      right: 2%;
+      z-index: 1300;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+    .action-btn {
+      padding: 1rem 1.5rem;
+      border: none;
+      border-radius: 20px;
+      background: linear-gradient(45deg, #ff3366, #ff758c);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 5px 15px rgba(255,51,102,0.3);
+    }
+    .action-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(255,51,102,0.5);
+    }
+    /* Volume slider */
+    #volume-control {
+      width: 120px;
+      margin-right: 10px;
+    }
 
-        @media (max-width: 768px) {
-            .gallery {
-                grid-template-columns: 1fr; /* Single column on mobile */
-            }
-        }
-    </style>
+    /* =========================================================================
+       6. GALLERY LAYOUT – SPACIOUS, PREMIUM & ORGANIZED
+       ========================================================================= */
+    .gallery-container {
+      position: relative;
+      z-index: 100;
+      max-width: 1200px;
+      margin: 6rem auto 5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 0 1rem;
+    }
+    .gallery-container::before {
+      content: "";
+      display: block;
+      height: 80px;
+    }
+    .art-frame {
+      position: relative;
+      background: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(255,255,255,0.3), 0 0 25px rgba(0,0,0,0.7);
+      border: 5px solid transparent;
+      border-image: linear-gradient(45deg, #b19400, #ffd700 50%, #7f5011) 1;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+    }
+    .art-frame:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 0 25px rgba(255,255,255,0.5), 0 0 40px rgba(0,0,0,0.8);
+    }
+    .art-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain; /* show full image without cropping */
+      transition: transform 0.5s ease;
+    }
+    .art-frame:hover img {
+      transform: scale(1.05);
+    }
+    /* Lightbox (expanded) mode: Centered image with minimal empty space */
+    .art-frame--expanded {
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      max-width: 95vw !important;
+      max-height: 95vh !important;
+      width: auto !important;
+      height: auto !important;
+      border-radius: 0 !important;
+      z-index: 3000;
+      box-shadow: 0 0 40px rgba(255,255,255,0.8), 0 0 60px rgba(255,0,0,0.4);
+    }
+    .art-frame--expanded img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+      transform: none !important;
+    }
+
+    /* =========================================================================
+       7. HEART RAIN & SPARKLES (inside expanded lightbox)
+       ========================================================================= */
+    .heart-rain {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .heart {
+      position: absolute;
+      font-size: 2rem;
+      color: #ff4081;
+      animation: heartFall 3s linear forwards;
+      opacity: 0.85;
+      text-shadow: 0 0 5px rgba(255,70,120,0.6);
+    }
+    @keyframes heartFall {
+      0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 1;
+      }
+      80% { opacity: 1; }
+      100% {
+        transform: translateY(120%) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle, #fff 0%, transparent 70%);
+      border-radius: 50%;
+      animation: sparkleMove 2s ease-out forwards;
+    }
+    @keyframes sparkleMove {
+      0% { transform: scale(0.3) translate(0,0); opacity: 1; }
+      100% { transform: scale(2) translate(50px, -60px); opacity: 0; }
+    }
+
+    /* =========================================================================
+       8. EMOJI DROP (Falling Hearts/Kisses from action buttons)
+       ========================================================================= */
+    .emoji {
+      position: fixed;
+      top: -50px;
+      font-size: 2rem;
+      pointer-events: none;
+      animation: dropEmoji 3s cubic-bezier(0.42, 0, 0.58, 1) forwards;
+      z-index: 4000;
+    }
+    @keyframes dropEmoji {
+      0%   { top: -50px; opacity: 1; transform: translateX(0) scale(0.7) rotate(0deg); }
+      50%  { opacity: 1; }
+      100% { top: 110vh; opacity: 0; transform: translateX(50px) scale(1.2) rotate(360deg); }
+    }
+
+    /* =========================================================================
+       9. RESPONSIVE STYLES
+       ========================================================================= */
+    @media(max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      .gallery-container {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+      .action-btn {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.9rem;
+      }
+      #volume-control {
+        width: 80px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>My Cozy Moments</h1>
-            <p>Personal collection of warm memories</p>
-        </div>
-    </header>
+  <!-- =========================================================================
+       HEADER (Signature / Title)
+       ========================================================================= -->
+  <header>
+    <h1>Gulsen seni cok seviyorum - Sener Dagli</h1>
+  </header>
 
-    <div class="container">
-        <div class="intro-text">
-            <p>A visual diary of my favorite cozy moments.</p>
-            <div class="divider"></div>
-        </div>
+  <!-- =========================================================================
+       BACKGROUND CANVAS: REALISTIC NIGHT SKY
+       ========================================================================= -->
+  <canvas id="sky-canvas"></canvas>
 
-        <div class="gallery">
-            <!-- REPLACE THESE 5 ITEMS WITH YOUR PHOTOS -->
-            <div class="gallery-item" onclick="openModal('images/photo1.jpg')">
-                <img src="images/photo1.jpg" alt="My cozy moment 1">
-            </div>
-            <div class="gallery-item" onclick="openModal('images/photo2.jpg')">
-                <img src="images/photo2.jpg" alt="My cozy moment 2">
-            </div>
-            <div class="gallery-item" onclick="openModal('images/photo3.jpg')">
-                <img src="images/photo3.jpg" alt="My cozy moment 3">
-            </div>
-            <div class="gallery-item" onclick="openModal('images/photo4.jpg')">
-                <img src="images/photo4.jpg" alt="My cozy moment 4">
-            </div>
-            <div class="gallery-item" onclick="openModal('images/photo5.jpg')">
-                <img src="images/photo5.jpg" alt="My cozy moment 5">
-            </div>
-        </div>
-    </div>
+  <!-- =========================================================================
+       FIREWORKS CANVAS: IMPRESSIVE ALL-WHITE "PEONY" FIREWORKS
+       ========================================================================= -->
+  <canvas id="fireworks-canvas"></canvas>
 
-    <!-- (Keep the modal and JavaScript the same) -->
+  <!-- =========================================================================
+       ACTION BUTTONS (Fireworks, Hearts, Kisses, Music Toggle, Volume)
+       ========================================================================= -->
+  <div class="action-buttons">
+    <button id="firework-btn" class="action-btn">Launch Fireworks</button>
+    <button id="hearts-btn" class="action-btn">Send Hearts</button>
+    <button id="kisses-btn" class="action-btn">Send Kisses</button>
+    <button id="music-btn" class="action-btn">Play Music</button>
+    <input type="range" id="volume-control" min="0" max="1" step="0.01" value="1" />
+  </div>
+
+  <!-- =========================================================================
+       BACKGROUND MUSIC (Place your music file in the music folder)
+       ========================================================================= -->
+  <audio id="bgMusic" src="music/romantic.mp3" loop></audio>
+
+  <!-- =========================================================================
+       GALLERY: PREMIUM IMAGE FRAMES (Images from images folder)
+       ========================================================================= -->
+  <div class="gallery-container">
+    <div class="art-frame"><img src="images/photo1.jpg" alt="Photo 1" /></div>
+    <div class="art-frame"><img src="images/photo2.jpg" alt="Photo 2" /></div>
+    <div class="art-frame"><img src="images/photo3.jpg" alt="Photo 3" /></div>
+    <div class="art-frame"><img src="images/photo4.jpg" alt="Photo 4" /></div>
+    <div class="art-frame"><img src="images/photo5.jpg" alt="Photo 5" /></div>
+  </div>
+
+  <!-- =========================================================================
+       JAVASCRIPT: BACKGROUND, FIREWORKS, EMOJI, MUSIC, GALLERY LIGHTBOX
+       ========================================================================= -->
+  <script>
+    /* =========================================================================
+       A) CUSTOM 2D NIGHT SKY BACKGROUND (No external libraries)
+       ========================================================================= */
+    const skyCanvas = document.getElementById("sky-canvas");
+    const skyCtx = skyCanvas.getContext("2d");
+    let skyW = window.innerWidth;
+    let skyH = window.innerHeight;
+    skyCanvas.width = skyW;
+    skyCanvas.height = skyH;
+
+    let stars = [];
+    let clouds = [];
+    let comets = [];
+
+    function initSky() {
+      stars = [];
+      clouds = [];
+      comets = [];
+      // Create a dense starfield (800 stars)
+      for (let i = 0; i < 800; i++) {
+        stars.push({
+          x: Math.random() * skyW,
+          y: Math.random() * skyH,
+          size: Math.random() * 1.5 + 0.5,
+          baseOpacity: Math.random() * 0.8 + 0.2,
+          opacity: 0,
+          twinkle: Math.random() * 0.02
+        });
+      }
+      // Create drifting clouds (to simulate depth)
+      for (let j = 0; j < 5; j++) {
+        clouds.push({
+          x: Math.random() * skyW,
+          y: Math.random() * (skyH * 0.5),
+          r: Math.random() * 80 + 60,
+          alpha: Math.random() * 0.15 + 0.1,
+          vx: Math.random() * 0.1 + 0.05
+        });
+      }
+    }
+    initSky();
+
+    // Comets: spawn every 5 seconds
+    function spawnComet() {
+      let startSide = Math.random();
+      let x, y, vx, vy;
+      if (startSide < 0.5) {
+        x = -50;
+        y = Math.random() * skyH * 0.3;
+        vx = Math.random() * 2 + 1;
+        vy = Math.random() * 0.5 + 0.2;
+      } else {
+        x = Math.random() * skyW;
+        y = -50;
+        vx = Math.random() * 1 + 0.5;
+        vy = Math.random() * 2 + 1;
+      }
+      comets.push({
+        x: x,
+        y: y,
+        vx: vx,
+        vy: vy,
+        opacity: 1,
+        length: Math.random() * 60 + 40
+      });
+    }
+    setInterval(spawnComet, 5000);
+
+    function animateSky() {
+      skyCtx.clearRect(0, 0, skyW, skyH);
+      // Create a deep, luxurious gradient (inspired by Rolls-Royce quality)
+      let grad = skyCtx.createLinearGradient(0, 0, 0, skyH);
+      grad.addColorStop(0, "#0a0a33");
+      grad.addColorStop(0.5, "#000022");
+      grad.addColorStop(1, "#000010");
+      skyCtx.fillStyle = grad;
+      skyCtx.fillRect(0, 0, skyW, skyH);
+
+      // Draw stars with twinkle
+      stars.forEach(star => {
+        star.opacity = star.baseOpacity + (Math.random() - 0.5) * star.twinkle;
+        if (star.opacity < 0.2) star.opacity = 0.2;
+        if (star.opacity > 1) star.opacity = 1;
+        skyCtx.save();
+        skyCtx.globalAlpha = star.opacity;
+        skyCtx.fillStyle = "#fff";
+        skyCtx.beginPath();
+        skyCtx.arc(star.x, star.y, star.size, 0, 2 * Math.PI);
+        skyCtx.fill();
+        skyCtx.restore();
+      });
+
+      // Draw drifting clouds
+      clouds.forEach(cloud => {
+        cloud.x += cloud.vx;
+        if (cloud.x - cloud.r > skyW) {
+          cloud.x = -cloud.r;
+          cloud.y = Math.random() * (skyH * 0.5);
+        }
+        skyCtx.save();
+        skyCtx.globalAlpha = cloud.alpha;
+        skyCtx.fillStyle = "#fff";
+        skyCtx.beginPath();
+        skyCtx.arc(cloud.x, cloud.y, cloud.r, 0, 2 * Math.PI);
+        skyCtx.fill();
+        skyCtx.restore();
+      });
+
+      // Update and draw comets
+      for (let i = comets.length - 1; i >= 0; i--) {
+        let c = comets[i];
+        c.x += c.vx;
+        c.y += c.vy;
+        c.opacity -= 0.003;
+        if (c.opacity <= 0 || c.x > skyW + 100 || c.y > skyH + 100) {
+          comets.splice(i, 1);
+          continue;
+        }
+        skyCtx.save();
+        skyCtx.globalAlpha = c.opacity;
+        skyCtx.strokeStyle = "#fff";
+        skyCtx.lineWidth = 2;
+        skyCtx.beginPath();
+        skyCtx.moveTo(c.x, c.y);
+        skyCtx.lineTo(c.x - c.length * (c.vx / 3), c.y - c.length * (c.vy / 3));
+        skyCtx.stroke();
+        skyCtx.restore();
+      }
+      requestAnimationFrame(animateSky);
+    }
+    animateSky();
+
+    window.addEventListener("resize", () => {
+      skyW = window.innerWidth;
+      skyH = window.innerHeight;
+      skyCanvas.width = skyW;
+      skyCanvas.height = skyH;
+      initSky();
+    });
+
+    /* =========================================================================
+       B) FIREWORKS – IMPRESSIVE ALL-WHITE "PEONY" FIREWORKS
+       ========================================================================= */
+    const fwCanvas = document.getElementById("fireworks-canvas");
+    const fwCtx = fwCanvas.getContext("2d");
+    let fwW = window.innerWidth;
+    let fwH = window.innerHeight;
+    fwCanvas.width = fwW;
+    fwCanvas.height = fwH;
+
+    let fireworks = [];
+    class FireworkParticle {
+      constructor(x, y, angle, speed) {
+        this.x = x;
+        this.y = y;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.alpha = 1;
+        this.fade = Math.random() * 0.01 + 0.005;
+        this.size = Math.random() * 2 + 1;
+        this.color = "rgba(255,255,255,0.9)";
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.02;
+        this.alpha -= this.fade;
+      }
+      draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+    function launchFirework() {
+      const cx = fwW / 2;
+      const cy = fwH / 2;
+      // Create an all-white peony burst
+      for (let i = 0; i < 200; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 3 + 1.5;
+        fireworks.push(new FireworkParticle(cx, cy, angle, speed));
+      }
+      // Optional: a second, smaller burst
+      setTimeout(() => {
+        for (let i = 0; i < 100; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 2 + 1;
+          fireworks.push(new FireworkParticle(cx, cy, angle, speed));
+        }
+      }, 400);
+    }
+    function animateFireworks() {
+      fwCtx.clearRect(0, 0, fwW, fwH);
+      for (let i = fireworks.length - 1; i >= 0; i--) {
+        let f = fireworks[i];
+        f.update();
+        f.draw(fwCtx);
+        if (f.alpha <= 0) {
+          fireworks.splice(i, 1);
+        }
+      }
+      requestAnimationFrame(animateFireworks);
+    }
+    animateFireworks();
+    window.addEventListener("resize", () => {
+      fwW = window.innerWidth;
+      fwH = window.innerHeight;
+      fwCanvas.width = fwW;
+      fwCanvas.height = fwH;
+    });
+    document.getElementById("firework-btn").addEventListener("click", () => {
+      launchFirework();
+    });
+
+    /* =========================================================================
+       C) EMOJI DROP – Hearts and Kisses
+       ========================================================================= */
+    function createEmoji(emojiChar) {
+      for (let i = 0; i < 10; i++) {
+        const em = document.createElement("div");
+        em.className = "emoji";
+        em.textContent = emojiChar;
+        em.style.left = Math.random() * 100 + "vw";
+        em.style.animationDelay = Math.random() * 0.5 + "s";
+        document.body.appendChild(em);
+        setTimeout(() => em.remove(), 3000);
+      }
+    }
+    document.getElementById("hearts-btn").addEventListener("click", () => {
+      createEmoji("❤️");
+    });
+    document.getElementById("kisses-btn").addEventListener("click", () => {
+      createEmoji("💋");
+    });
+
+    /* =========================================================================
+       D) MUSIC TOGGLE & VOLUME CONTROL
+       ========================================================================= */
+    const musicBtn = document.getElementById("music-btn");
+    const bgMusic = document.getElementById("bgMusic");
+    let isMusicPlaying = false;
+    musicBtn.addEventListener("click", () => {
+      if (!isMusicPlaying) {
+        bgMusic.play();
+        isMusicPlaying = true;
+        musicBtn.textContent = "Stop Music";
+      } else {
+        bgMusic.pause();
+        bgMusic.currentTime = 0;
+        isMusicPlaying = false;
+        musicBtn.textContent = "Play Music";
+      }
+    });
+    const volumeControl = document.getElementById("volume-control");
+    volumeControl.addEventListener("input", (e) => {
+      bgMusic.volume = e.target.value;
+    });
+
+    /* =========================================================================
+       E) GALLERY LIGHTBOX & HEART RAIN
+       ========================================================================= */
+    const frames = document.querySelectorAll(".art-frame");
+    let currentExpanded = null;
+    frames.forEach((frame) => {
+      frame.addEventListener("click", () => {
+        if (currentExpanded && currentExpanded !== frame) {
+          currentExpanded.classList.remove("art-frame--expanded");
+          removeHeartRain(currentExpanded);
+        }
+        if (!frame.classList.contains("art-frame--expanded")) {
+          frame.classList.add("art-frame--expanded");
+          currentExpanded = frame;
+          createHeartRain(frame);
+        } else {
+          frame.classList.remove("art-frame--expanded");
+          removeHeartRain(frame);
+          currentExpanded = null;
+        }
+      });
+    });
+    function createHeartRain(frameElem) {
+      const container = document.createElement("div");
+      container.className = "heart-rain";
+      frameElem.appendChild(container);
+      for (let i = 0; i < 25; i++) {
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = "❤️";
+        h.style.left = Math.random() * 80 + 10 + "%";
+        h.style.animationDelay = Math.random() * 1 + "s";
+        container.appendChild(h);
+      }
+      for (let s = 0; s < 10; s++) {
+        const sp = document.createElement("div");
+        sp.className = "sparkle";
+        sp.style.left = Math.random() * 80 + 10 + "%";
+        sp.style.top = Math.random() * 70 + 15 + "%";
+        container.appendChild(sp);
+      }
+    }
+    function removeHeartRain(frameElem) {
+      const hr = frameElem.querySelector(".heart-rain");
+      if (hr) frameElem.removeChild(hr);
+    }
+  </script>
 </body>
 </html>
